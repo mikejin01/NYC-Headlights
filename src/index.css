@@ -5,7 +5,7 @@
   --ink:#0a0a0a;      /* absolute black — text & structure */
   --mute:#56504f;     /* graphite — secondary text */
   --line:#e0e0e0;     /* hairline border */
-  --red:#e4121d;      /* signal red */
+  --red:#1e7fff;      /* headlight beam blue — primary accent */
 }
 /* dark bands — re-scope the palette so child rules invert automatically.
    The page alternates: hero ■ / license □ / trust ■ / services □ / work ■ /
@@ -45,7 +45,14 @@ img{display:block}
 header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
   backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid #e0e0e0}
 .nav{display:flex;align-items:center;justify-content:space-between;height:78px}
-.nav-logo img{width:150px;height:auto}
+/* text wordmark logo */
+.brand{display:inline-flex;align-items:baseline;gap:.42ch;font-weight:900;
+  font-size:23px;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+.brand .b1{color:var(--red)}
+.brand .b2{color:var(--ink)}
+.nav-logo{flex-shrink:0;display:flex;align-items:center}
+/* brand logo is white line-art on transparent — invert it for the light header */
+.nav-logo img{height:52px;width:auto;filter:invert(1)}
 .nav-links{display:flex;gap:34px;align-items:center}
 .nav-links a{font-size:14px;font-weight:600;color:#33312e}
 .nav-links a:hover{color:#000}
@@ -54,8 +61,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 .btn{display:inline-flex;align-items:center;gap:9px;background:var(--red);color:#fff !important;
   font-weight:700;font-size:13px;letter-spacing:.02em;padding:13px 22px;border:1px solid var(--red);
   transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease}
-.btn:hover{background:#b10d16;border-color:#b10d16;color:#fff !important;
-  transform:translateY(-2px);box-shadow:0 8px 22px rgba(228,18,29,.32)}
+.btn:hover{background:#0a5cd6;border-color:#0a5cd6;color:#fff !important;
+  transform:translateY(-2px);box-shadow:0 8px 22px rgba(30,127,255,.38)}
 .btn.ghost{background:transparent;color:#fff !important;border-color:rgba(255,255,255,.55)}
 .btn.ghost:hover{background:#fff;color:#0a0a0a !important;border-color:#fff;
   transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.28)}
@@ -82,11 +89,16 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 /* hero */
 .hero{position:relative;min-height:90vh;display:flex;flex-direction:column;
   justify-content:flex-end;overflow:hidden;border-bottom:1px solid var(--line)}
-.hero-bg{position:absolute;inset:0}
-.hero-bg .ph{width:100%;height:100%;align-items:stretch}
-.hero-bg .ph span{align-self:flex-end}
+.hero-bg{position:absolute;inset:0;background-color:#08090b;
+  background-size:cover;background-position:center;background-repeat:no-repeat}
+/* subtle blue beam wash to tie the photo to our accent */
+.hero-bg::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(60% 80% at 70% 40%,rgba(120,176,255,.16),transparent 70%)}
+/* darken the left (text) and bottom so copy stays crisp; let the headlight glow centre-right */
 .hero-bg::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(180deg,rgba(12,12,11,.65) 0%,rgba(12,12,11,.35) 35%,rgba(12,12,11,.7) 75%,rgba(12,12,11,.96) 100%)}
+  background:
+    linear-gradient(90deg,rgba(8,9,11,.88) 0%,rgba(8,9,11,.5) 44%,rgba(8,9,11,.12) 68%,rgba(8,9,11,.4) 100%),
+    linear-gradient(180deg,rgba(8,9,11,.35) 0%,transparent 30%,rgba(8,9,11,.72) 84%,rgba(8,9,11,.97) 100%)}
 
 /* hero slider */
 .hero-slide{position:absolute;inset:0;opacity:0;transform:scale(1.02);
@@ -115,6 +127,10 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 .hero-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 40px;margin-top:34px}
 .hero-row p{max-width:42ch;color:#c9c6bc;font-size:16px;line-height:1.6}
 .hero-actions{display:flex;gap:12px;flex-shrink:0}
+.hero-meta{display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:32px;color:#cfd6e2}
+.hero-meta span{display:flex;align-items:center;gap:9px;font-weight:700}
+.hero-meta span::before{content:"";width:7px;height:7px;background:var(--red);border-radius:50%;
+  box-shadow:0 0 10px 1px rgba(30,127,255,.85);flex-shrink:0}
 
 /* hero quote card — frosted dark glass, blends with the dark hero scrim */
 .quote-card{position:relative;align-self:end;
@@ -148,8 +164,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 .license{padding:52px 0;text-align:center;background:var(--bg2);border-bottom:1px solid var(--line)}
 .license-line{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center;align-items:center;
   font-size:clamp(22px,3.4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.license .nyc{font-weight:900;font-size:1.18em;letter-spacing:-.05em;line-height:.9;
-  color:#1d63c4;-webkit-text-stroke:.5px #1d63c4}
+.license .nyc{font-weight:900;color:var(--ink)}
 .license .lic{color:var(--red)}
 .license-sub{margin-top:14px;color:var(--mute);font-size:clamp(13px,1.6vw,16px)}
 
@@ -207,6 +222,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 .big{grid-column:span 4;height:480px}
 .tall{grid-column:span 2;height:480px}
 .third{grid-column:span 2;height:300px}
+.half{grid-column:span 3;height:340px}
 
 /* clients */
 .clients{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
@@ -216,16 +232,44 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 .client:hover{transform:translateY(-3px);border-color:var(--ink)}
 .client img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 
+/* featured in-stock products */
+.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.prod{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);
+  overflow:hidden;transition:border-color .2s ease,transform .2s ease}
+.prod:hover{border-color:var(--red);transform:translateY(-4px)}
+.prod-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#fff}
+.prod-media .img{width:100%;height:100%;transition:transform .45s ease}
+.prod:hover .prod-media .img{transform:scale(1.05)}
+.prod-badge{position:absolute;top:12px;left:12px;background:var(--red);color:#fff;
+  font-size:9.5px;letter-spacing:.12em;padding:5px 9px}
+.prod-info{padding:18px 18px 20px;display:flex;flex-direction:column}
+.prod-make{color:var(--red);font-size:10px;margin-bottom:7px}
+.prod-info h3{font-size:18px;font-weight:800;letter-spacing:-.01em;color:var(--ink);line-height:1.18}
+.prod-link{margin-top:12px;color:var(--mute);font-size:12.5px;font-weight:600;transition:color .2s ease}
+.prod:hover .prod-link{color:var(--red)}
+.feat-foot{display:flex;justify-content:center;margin-top:38px}
+
+/* shop by vehicle — brand cards */
+.vehicles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.vcard{background:#fff;border:1px solid var(--line);padding:34px 30px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+  transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease}
+.vcard:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 16px 32px rgba(0,0,0,.08)}
+.vlogo{height:60px;display:flex;align-items:center;margin-bottom:22px}
+.vlogo img{max-height:60px;max-width:180px;width:auto;height:auto;object-fit:contain}
+.vcard h3{font-size:21px;font-weight:800;letter-spacing:-.01em;margin-bottom:9px;color:var(--ink)}
+.vcard p{color:var(--mute);font-size:14px;line-height:1.55}
+
 /* areas */
 .areas{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
 .area-map{height:470px;border:1px solid var(--ink);padding:16px;
   background:radial-gradient(120% 120% at 50% 25%,#1b2330,#0d1118)}
 .area-map svg{width:100%;height:100%;display:block}
-.rg{fill:#3c4150;stroke:#7d8493;stroke-width:1.3;cursor:pointer;
+.rg{fill:#3c4150;stroke:#7d8493;stroke-width:.4;cursor:pointer;
   transition:fill .25s ease,stroke .25s ease,filter .25s ease}
-.rg:hover,.rg.active{fill:var(--red);stroke:#ff7a64}
-.rg.active{filter:drop-shadow(0 0 7px rgba(255,59,29,.65))}
-.rg-label{fill:#c5cad6;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.05em;
+.rg:hover,.rg.active{fill:var(--red);stroke:#82b4ff}
+.rg.active{filter:drop-shadow(0 0 7px rgba(30,127,255,.7))}
+.rg-label{fill:#dbe2ee;font-family:'Space Mono',monospace;font-size:2.6px;letter-spacing:.04px;
   text-transform:uppercase;pointer-events:none;transition:fill .25s ease;font-weight:700}
 .rg-label.active{fill:#fff}
 .map-water{fill:#56607a;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;
@@ -253,7 +297,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 /* CTA */
 .cta{padding:120px 0;text-align:center;position:relative;overflow:hidden}
 .cta::before{content:"";position:absolute;inset:0;background:
-  radial-gradient(60% 80% at 50% 30%,rgba(255,59,29,.16),transparent 70%)}
+  radial-gradient(60% 80% at 50% 30%,rgba(30,127,255,.18),transparent 70%)}
 .cta-in{position:relative;z-index:2;max-width:900px;margin:0 auto}
 .cta h2{font-size:clamp(44px,7vw,104px);font-weight:800;line-height:.92;letter-spacing:-.03em;
   text-transform:uppercase}
@@ -264,11 +308,12 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);
 /* footer */
 footer{padding:60px 0 44px;border-top:4px solid var(--red)}
 .foot{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.foot-logo img{width:172px}
+.foot-logo img{height:74px;width:auto}
 .foot-cols{display:flex;gap:60px}
 .foot-col h5{color:var(--mute);margin-bottom:14px}
 .foot-col a{display:block;font-size:14px;padding:5px 0;color:#cdcabf;font-weight:500}
 .foot-col a:hover{color:var(--red)}
+.foot-hours{display:block;margin-top:10px;color:var(--mute);font-size:11px;line-height:1.5}
 .foot-bottom{display:flex;justify-content:space-between;margin-top:50px;padding-top:22px;
   border-top:1px solid var(--line);color:var(--mute);font-size:12px}
 
@@ -294,6 +339,8 @@ footer{padding:60px 0 44px;border-top:4px solid var(--red)}
   .hero-arrow{display:none}
   .clients{grid-template-columns:repeat(2,1fr)}
   .client{height:96px;padding:16px 18px}
+  .feat{grid-template-columns:repeat(2,1fr)}
+  .vehicles{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
   .wrap{padding:0 18px}
@@ -324,6 +371,8 @@ footer{padding:60px 0 44px;border-top:4px solid var(--red)}
   .work{gap:10px}
   .work .cell{height:240px !important}
   .clients{grid-template-columns:repeat(2,1fr);gap:12px}
+  .feat{grid-template-columns:1fr;gap:14px}
+  .vehicles{grid-template-columns:1fr;gap:12px}
   .area-map{height:320px;padding:12px}
   .area-grid{grid-template-columns:1fr 1fr;gap:0 24px}
   .area-grid li{font-size:15px;padding:13px 0}

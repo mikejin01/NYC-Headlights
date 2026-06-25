@@ -1,8 +1,6 @@
-# Space-Sign
+# NYC Headlights
 
-Marketing site for Space Sign, built with React + Vite.
-
-Live site: https://mikejin01.github.io/Space-Sign/
+Marketing site for **NYC Headlights** — NYC's precision headlight specialists. Built with React + Vite.
 
 ## Develop
 
@@ -11,4 +9,16 @@ pnpm install
 pnpm dev
 ```
 
-Deploys automatically to GitHub Pages via GitHub Actions on every push to `main`.
+## Build
+
+```bash
+pnpm build
+pnpm preview
+```
+
+## Contact
+
+- Phone: (929) 409-9330
+- Email: jerry@nycheadlights.com
+- Hours: Mon–Sat 9AM–7PM · Sun by appointment
+- New York City — all five boroughs

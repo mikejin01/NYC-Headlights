@@ -1,53 +1,56 @@
-# Space Sign — Business Information
+# NYC Headlights — Business Information
 
-> Scraped from https://www.spacesign.com (Wix site) on 2026-06-23 for the homepage rebuild.
+> Reference for the homepage rebrand (from client brief + https://nycheadlights.com, 2026-06-25).
 
 ## Identity
-- **Name:** Space Sign
-- **Tagline:** NYC Licensed Sign Hanger (License #215)
-- **Headline:** "Space Sign is one of the top sign makers in the tri-state area."
-- **Established:** 1987 (30+ years)
-- **Rating:** 4.9 stars
+- **Name:** NYC Headlights
+- **Tagline:** NYC's precision headlight specialists
+- **Headline:** "Precision Optics for the City that Never Sleeps"
+- **Positioning:** OEM headlight specialists for BMW, Mercedes-Benz, Lexus, Audi, Toyota & Mazda — trained optics specialists, not general mechanics.
 
 ## Contact
-- **Phone:** (718) 961-1112
-- **Fax:** (718) 961-5577
-- **Email:** info@spacesign.com
-- **Address:** 15-25 132nd Street, College Point, NY 11356 (Queens)
+- **Phone:** (929) 409-9330
+- **Email:** jerry@nycheadlights.com
+- **Location:** New York City (all five boroughs); walk-in service available
 
-## Positioning / About copy (verbatim)
-- "Based out of Queens, NY, we at Space Sign provide a full-concierge service, taking care of all our client's signage needs from sales and design, to the manufacture and final installation processes."
-- "Since 1987, Space Sign has set the industry standard for quality, selection and customer service."
-- "We produce all our signs under one roof, a purpose-built factory designed to facilitate ease of communication and efficiency."
-- "We apply traditional skills and materials to the latest and most advanced technology."
-- Licensed as a **Special Sign Hanger by the NYC Department of Buildings**; in-house Permit Department handles permit applications and violation removal.
-- "Located in the center of Queens, we provide signage to our clients anywhere in the Tri-State region from East Long Island to New Jersey."
+## Hours
+- Mon–Sat: 9AM – 7PM
+- Sunday: By Appointment
+
+## Services
+1. **OEM Replacement** — Factory-direct optics for all major makes and models. Certified parts with full warranty.
+2. **Restoration & Refurbish** — Lens restoration, moisture removal, wiring repair, ballast diagnostics.
+3. **Aftermarket Upgrades** — Performance LED & laser conversions, projector retrofits, custom DRL installs.
+4. **Wholesale & Recycling** — Used headlight assembly purchasing and core recycling; trade pricing for shops.
+
+## Selling points / stats
+- 10,000+ headlight parts in stock
+- 24-hour turnaround capability; most repairs 3–5 days, express options available
+- Direct manufacturer relationships — authenticated, warranted parts
+- Technicians are trained optics specialists, not general mechanics
 
 ## Service area
-Queens, Brooklyn, Manhattan, the Bronx, Long Island — and the wider Tri-State area (NY, NJ, CT).
+All five boroughs of NYC: Manhattan, Brooklyn, Queens, the Bronx, Staten Island.
 
-## Services / Products
-Channel Letters (Front Lit / Back Lit / Front & Back Lit), 3D Letters, LED Neon Signs,
-Illuminated Lightbox Signs, Blade Signs, Push-Thru Signs, Carved Signs, Pylon Signs,
-Interior Signs, Awnings & Vestibules, Digital Printing / Custom Vinyl Decals, Custom Banners,
-Trade Show Booths & Displays, Sign Installation & Maintenance, DOB Permits, DOB/ECB Violation Removal.
+## Assets (scraped from nycheadlights.com, 2026-06-25)
+Stored under `public/assets/nych/`:
+- `logo.png` — official white line-art logo (headlight + NYC skyline, transparent). Inverted to
+  black via CSS for the light header; used as-is (white) in the dark footer.
+- `favicon.png` — site favicon.
+- `hero-headlight.jpg` — lit chrome headlight; used as the hero background.
+- `audi.avif` — black Audi front-end; used as the CTA backdrop.
+- `gallery/g1–g7.jpg` — real OEM headlight assemblies; g1/g4/g6/g5 power the "Featured OEM
+  Headlights in Stock" product cards (g2/g3/g7 are spares).
+- `brands/{bmw,mercedes-benz,audi,toyota,lexus,mazda}.png` — official manufacturer logos
+  (car-logos-dataset) for the "Shop OEM Headlights by Vehicle" cards.
 
-## Permits & Violations (verbatim)
-- "All signs require Sign Permits issued by the NYC Department of Buildings (DOB)."
-- "NYC Licensed Sign Hangers are the only persons legally allowed to pull a Sign Permit in NYC."
-- "NYC DOB and NYC ECB issue violations for all types of signs, awnings, and canopies that are in violation of the NYC Administrative Codes."
-- "NYC Sign Violations can only be corrected and cleared by NYC Licensed Sign Hangers."
+## Homepage sections (matching the live site)
+01 Services · 02 Featured OEM Headlights in Stock · 03 Shop OEM Headlights by Vehicle ·
+04 Service Areas · 05 Process. Featured/by-vehicle copy is lifted verbatim from nycheadlights.com.
 
-## Selected clients (from portfolio photos)
-Bareburger, Subway, Kung Fu Tea, Panini, Gong cha, Oren Orthodontics, Daiso, Raby Garden Farm,
-Key Food, Chase, Taco Bell, TGI Fridays, Kumon, European Wax Center, plus many local storefronts.
-
-## Site pages
-home, about-us, contact-us, signs, channel-letters, 3d-letters, led-neon-sign,
-illuminated-sign-box, blade-signs, push-thru-sign, carved-signs, awning-vestibule,
-interior-signs, banners, custom-vinyl-decals, permit-violations.
-
-## Asset archive
-- `public/assets/work/` — curated, web-optimized photos used by the homepage.
-- `public/assets/archive/` — every image scraped from the homepage (optimized), for future use.
-- Originals were downloaded at full resolution during scraping (not committed).
+## Notes for future expansion
+- Home page only for now (single-page React/Vite site).
+- "Makes We Service" is a text-badge grid; can become real OEM brand logos later.
+- Accent color is a headlight-beam blue (`--red: #1e7fff` in `src/index.css`).
+- Original full-res versions of the gallery photos (1707px–2560px) exist on the live site if
+  larger sources are needed; we pulled the 1024px renditions for weight.

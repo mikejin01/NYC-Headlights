@@ -70,7 +70,54 @@ const icons = {
       <path d="M16.5 13 L31.5 20" className="ic-dot" />
     </svg>
   ),
+  // Headlight throwing tight, parallel laser beams
+  laser: (
+    <svg {...ICON_PROPS} aria-hidden="true">
+      <path d="M8 17 Q8 11 15 11 L31 12 Q37 12.5 37 24 Q37 35.5 31 36 L15 37 Q8 37 8 31 Z" />
+      <circle cx="16" cy="24" r="4.4" />
+      <path d="M39 24 H47 M39 20 H46 M39 28 H46" className="ic-dot" />
+    </svg>
+  ),
+  // Projector lens — concentric optic
+  projector: (
+    <svg {...ICON_PROPS} aria-hidden="true">
+      <circle cx="24" cy="24" r="14" />
+      <circle cx="24" cy="24" r="7" />
+      <circle cx="24" cy="24" r="2.2" className="ic-dot" />
+    </svg>
+  ),
+  // Magnifier — header search
+  search: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M21 21 L16.7 16.7" />
+    </svg>
+  ),
+  // Phone receiver
+  phone: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  ),
+  // Clock — business hours
+  clock: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </svg>
+  ),
 }
+
+// Shop-by-type tiles (CarParts-style category row) — every entry is a real
+// service/product line; tiles jump to the matching section.
+const categories = [
+  { name: 'OEM Assemblies', icon: 'oem', href: '#inventory' },
+  { name: 'LED Upgrades', icon: 'upgrade', href: '#services' },
+  { name: 'Laser Systems', icon: 'laser', href: '#services' },
+  { name: 'Projector Retrofit', icon: 'projector', href: '#services' },
+  { name: 'Restoration', icon: 'restore', href: '#services' },
+  { name: 'Trade & Wholesale', icon: 'wholesale', href: '#trade' },
+]
 
 // Featured ready-to-ship OEM headlights (vehicles mirror nycheadlights.com),
 // paired with our in-shop assembly photos.
@@ -104,11 +151,19 @@ const regions = [
 
 const areas = regions.map((r) => ({ key: r.key, name: r.name }))
 
-const steps = [
-  { s: '/01', h: 'Diagnose & Quote', p: 'We inspect the assembly, identify the right OEM part or restoration path, and give you a fixed price up front.' },
-  { s: '/02', h: 'Source or Prep', p: 'We pull the certified OEM optic from our 10,000+ part inventory — or prep the lens and housing for restoration.' },
-  { s: '/03', h: 'Service', p: 'Restore, retrofit or replace — moisture sealing, wiring, ballast work and LED/laser conversions by optics specialists.' },
-  { s: '/04', h: 'Install & Warranty', p: 'We fit, aim and road-test every job, then back it with warranty. Most jobs in 3–5 days; express available.' },
+// FAQ — questions & answers lifted verbatim from nycheadlights.com/faq.
+const faqs = [
+  { q: 'Can foggy headlights be repaired or do they need replacement?', a: 'Foggy headlights can often be restored if the damage is on the surface. However, if there is internal damage, moisture intrusion, or structural issues, replacement may be necessary.' },
+  { q: 'Can you help me find the correct OEM headlight?', a: "Yes. We match headlights based on your vehicle's year, make, model, trim, and lighting type to ensure proper fitment." },
+  { q: 'What does OEM mean for headlights?', a: "OEM stands for Original Equipment Manufacturer. These headlights are designed to match your vehicle's original factory specifications for fit and performance." },
+  { q: 'Are OEM headlights better than aftermarket?', a: "OEM headlights typically provide better fitment, alignment, and compatibility with your vehicle's electrical system compared to aftermarket options." },
+  { q: 'What are aftermarket headlight upgrades?', a: 'Aftermarket upgrades include LED conversions, projector retrofits, and custom lighting enhancements designed to improve visibility and appearance.' },
+  { q: 'Do LED upgrades improve visibility?', a: 'Yes. High-quality LED upgrades can significantly improve brightness, clarity, and nighttime visibility.' },
+  { q: 'Can you fix moisture inside a headlight?', a: 'Yes. We can remove moisture, reseal the housing, and prevent future condensation issues depending on the condition of the headlight.' },
+  { q: 'How long does headlight repair take?', a: 'Most headlight repairs can be completed within a few hours. More complex issues involving wiring or internal components may take longer.' },
+  { q: 'How much does headlight replacement cost?', a: 'Pricing varies by vehicle and headlight type, with OEM options typically costing more than aftermarket alternatives.' },
+  { q: 'Do you service luxury vehicles?', a: 'Yes. We work on a wide range of vehicles including BMW, Mercedes-Benz, Audi, Lexus, and more.' },
+  { q: 'Do you offer same-day service?', a: 'Many services can be completed the same day depending on availability and the complexity of the job.' },
 ]
 
 export default function App() {
@@ -116,7 +171,21 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [query, setQuery] = useState('')
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+
+  const onSearchSubmit = useCallback((e) => {
+    e.preventDefault()
+    const q = query.trim()
+    const subject = q ? `Headlight search — ${q}` : 'Headlight inquiry'
+    const body = [
+      "I'm looking for the following headlight / part:",
+      '',
+      q || '(year, make, model & side — e.g. 2021 BMW X5 driver side)',
+    ].join('\n')
+    setMenuOpen(false)
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }, [query])
 
   const onField = useCallback((e) => {
     const { name, value } = e.target
@@ -140,20 +209,47 @@ export default function App() {
 
   return (
     <>
+      {/* TOP TRUST BAR (CarParts-style utility strip) */}
+      <div className="topbar">
+        <div className="wrap">
+          <div className="topbar-props">
+            <span>Guaranteed OEM Fit</span>
+            <span>24-Hour Turnaround Available</span>
+            <span>Warranty-Backed</span>
+            <span>Free Quotes</span>
+          </div>
+          <div className="topbar-right">
+            <span className="tb-hours"><span className="tb-ic">{icons.clock}</span>Mon–Sat 9AM–7PM · Sun by appointment</span>
+          </div>
+        </div>
+      </div>
+
       <header>
         <div className="wrap nav">
           <a className="nav-logo" href="#" onClick={closeMenu}>
             <img src={`${BASE}assets/nych/logo.png`} alt="NYC Headlights" />
+            <span className="nav-brand">
+              <span className="nb-name">NYC Headlights</span>
+              <span className="nb-tag mono">OEM Headlight Specialists</span>
+            </span>
           </a>
-          <nav className="nav-links">
-            <a href="#services">Services</a>
-            <a href="#inventory">In Stock</a>
-            <a href="#vehicles">Vehicles</a>
-            <a href="#areas">Service Areas</a>
-            <a href="#process">Process</a>
-            <a className="nav-phone" href={PHONE_TEL}>{PHONE}</a>
+          <form className="hsearch" onSubmit={onSearchSubmit} role="search">
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by year, make, model or part — e.g. 2021 BMW X5"
+              aria-label="Search headlights by vehicle or part"
+            />
+            <button type="submit" aria-label="Search">{icons.search}</button>
+          </form>
+          <div className="nav-actions">
+            <a className="nav-phone" href={PHONE_TEL}>
+              <span className="np-ic">{icons.phone}</span>
+              <span className="np-text">{PHONE}</span>
+            </a>
             <a className="btn" href="#quote">Get a free quote</a>
-          </nav>
+          </div>
           <button
             className={`nav-toggle${menuOpen ? ' open' : ''}`}
             aria-label="Toggle menu"
@@ -163,13 +259,36 @@ export default function App() {
             <span /><span /><span />
           </button>
         </div>
+        <div className="subnav">
+          <nav className="wrap subnav-links">
+            <a href="#categories">Shop by Type</a>
+            <a href="#services">Services</a>
+            <a href="#inventory">In Stock</a>
+            <a href="#vehicles">Vehicles</a>
+            <a href="#trade">Trade &amp; Body Shops</a>
+            <a href="#areas">Service Areas</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
         <nav className={`mobile-menu${menuOpen ? ' open' : ''}`}>
+          <form className="hsearch" onSubmit={onSearchSubmit} role="search">
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search year, make, model or part…"
+              aria-label="Search headlights"
+            />
+            <button type="submit" aria-label="Search">{icons.search}</button>
+          </form>
+          <a href="#categories" onClick={closeMenu}>Shop by Type</a>
           <a href="#services" onClick={closeMenu}>Services</a>
           <a href="#inventory" onClick={closeMenu}>In Stock</a>
           <a href="#vehicles" onClick={closeMenu}>Vehicles</a>
+          <a href="#trade" onClick={closeMenu}>Trade &amp; Body Shops</a>
           <a href="#areas" onClick={closeMenu}>Service Areas</a>
-          <a href="#process" onClick={closeMenu}>Process</a>
-          <a className="nav-phone" href={PHONE_TEL} onClick={closeMenu}>{PHONE}</a>
+          <a href="#faq" onClick={closeMenu}>FAQ</a>
+          <a className="nav-phone" href={PHONE_TEL} onClick={closeMenu}><span className="np-ic">{icons.phone}</span>{PHONE}</a>
           <a className="btn" href="#quote" onClick={closeMenu}>Get a free quote</a>
         </nav>
       </header>
@@ -181,7 +300,7 @@ export default function App() {
         <div className="hero-content">
           <div className="wrap hero-grid">
             <div className="hero-main">
-              <div className="hero-kicker mono">OEM Headlight Specialists · All Five Boroughs</div>
+              <div className="hero-kicker mono">OEM Headlight Specialists · Trade &amp; Retail · All Five Boroughs</div>
               <h1>Precision optics<br />for the city that <em>never sleeps.</em></h1>
               <div className="hero-row">
                 <p>NYC Headlights is the city's OEM headlight specialist — restoration, retrofits and certified replacements for BMW, Mercedes-Benz, Lexus, Audi, Toyota, Mazda and more, across all five boroughs.</p>
@@ -211,6 +330,25 @@ export default function App() {
               </button>
               <p className="qc-fine mono">Free quotes across all five boroughs · usually the same day</p>
             </form>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOP BY TYPE — category tiles */}
+      <section className="cats" id="categories">
+        <div className="wrap">
+          <div className="cats-head">
+            <div className="k mono">Shop by Type</div>
+            <h2>Browse headlights</h2>
+            <p>Jump straight to the work you need — OEM, upgrades or restoration.</p>
+          </div>
+          <div className="cat-row">
+            {categories.map((c) => (
+              <a className="cat" href={c.href} key={c.name}>
+                <span className="cat-ic">{icons[c.icon]}</span>
+                <span className="cat-name">{c.name}</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
@@ -350,18 +488,45 @@ export default function App() {
         </div>
       </section>
 
-      {/* PROCESS */}
-      <section className="sec" id="process">
+      {/* TRADE / BODY SHOPS */}
+      <section className="trade" id="trade">
+        <div className="wrap">
+          <div className="trade-in">
+            <div>
+              <div className="k mono">Trade &amp; Wholesale</div>
+              <h2>Built for body shops &amp; the trade</h2>
+              <p>We supply body shops, dealers and independent garages across NYC with authenticated OEM headlights and a used-assembly buy-back program — trade pricing, fast sourcing and a direct line to a specialist who knows the part.</p>
+              <ul>
+                <li>Trade pricing on OEM &amp; upgrade assemblies for shops</li>
+                <li>10,000+ parts in stock — driver, passenger or matched pairs</li>
+                <li>We buy used assemblies and recycle cores</li>
+                <li>24-hour turnaround available on stocked parts</li>
+              </ul>
+            </div>
+            <div className="trade-card">
+              <span className="tc-k">Open a trade line</span>
+              <a className="tc-phone" href={PHONE_TEL}>{PHONE_DOT}</a>
+              <a className="tc-email" href={`mailto:${EMAIL}?subject=${encodeURIComponent('Trade / wholesale account inquiry')}`}>{EMAIL}</a>
+              <div className="tc-div" />
+              <a className="btn" href={`mailto:${EMAIL}?subject=${encodeURIComponent('Trade / wholesale pricing request')}`}>Request trade pricing</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="sec dark" id="faq">
         <div className="wrap">
           <div className="sec-head">
-            <div><div className="k mono">05 / Process</div><h2>Four steps, one shop</h2></div>
-            <p>A straight path from quote to install — diagnostics, parts, service and warranty, all handled in-house by our techs.</p>
+            <div><div className="k mono">05 / FAQ</div><h2>Common questions</h2></div>
+            <p>Headlights, OEM versus aftermarket, turnaround and fitment — the answers we give most often. Still unsure? Call or send us your vehicle.</p>
           </div>
-          <div className="proc">
-            {steps.map((st) => (
-              <div className="proc-step" key={st.s}>
-                <span className="s">{st.s}</span><h4>{st.h}</h4><p>{st.p}</p>
-              </div>
+          <div className="faq-list">
+            {faqs.map((f) => (
+              <details className="faq-item" key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
             ))}
           </div>
         </div>
@@ -391,8 +556,8 @@ export default function App() {
               <p className="mono" style={{ marginTop: 16, color: 'var(--mute)' }}>Restore · Retrofit · Replace</p>
             </div>
             <div className="foot-cols">
-              <div className="foot-col"><h5 className="mono">Company</h5><a href="#services">Services</a><a href="#inventory">In Stock</a><a href="#vehicles">Vehicles</a><a href="#process">Process</a><a href="#areas">Service Areas</a></div>
-              <div className="foot-col"><h5 className="mono">Services</h5><a href="#services">OEM Replacement</a><a href="#services">Restoration &amp; Refurbish</a><a href="#services">Aftermarket Upgrades</a><a href="#services">Wholesale &amp; Recycling</a></div>
+              <div className="foot-col"><h5 className="mono">Explore</h5><a href="#categories">Shop by Type</a><a href="#inventory">In Stock</a><a href="#vehicles">Vehicles</a><a href="#trade">Trade &amp; Body Shops</a><a href="#faq">FAQ</a><a href="#areas">Service Areas</a></div>
+              <div className="foot-col"><h5 className="mono">Services</h5><a href="#services">OEM Replacement</a><a href="#services">Restoration &amp; Refurbish</a><a href="#services">Aftermarket Upgrades</a><a href="#trade">Wholesale &amp; Recycling</a></div>
               <div className="foot-col">
                 <h5 className="mono">Contact</h5>
                 <a href={`mailto:${EMAIL}`}>{EMAIL}</a>

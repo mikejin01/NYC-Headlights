@@ -1,5 +1,11 @@
 # Next session prompt
 
+> **Done 2026-10-05.** Steps 1–9 below are complete: the `nyc-headlights` theme
+> is live, pages renamed with 301s, Elementor and addons removed. Still open:
+> step 10 (Search Console — needs the property added and verified by the user)
+> and the "iDeal Auto Inc." wording on /accessibility/. Kept for history; see
+> CLAUDE.md for the current state.
+
 Copy everything below the line into a fresh session started from the repo root.
 
 ---

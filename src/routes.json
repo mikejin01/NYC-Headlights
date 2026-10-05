@@ -1,0 +1,93 @@
+{
+  "_comment": "Single source of truth for routes. Read by src/App.jsx (React Router) AND build-wordpress-theme.cjs (xo_required_pages, legacy 301s, Yoast seed). Edit here only.",
+  "routes": [
+    {
+      "path": "/",
+      "slug": "",
+      "title": "Home",
+      "nav": null,
+      "seoTitle": "NYC Headlights | OEM Headlight Replacement, Restoration & LED Upgrades in NYC",
+      "seoDesc": "NYC's OEM headlight specialists. Certified replacement, lens restoration, LED & laser retrofits for BMW, Mercedes-Benz, Lexus, Audi, Toyota and more. All five boroughs."
+    },
+    {
+      "path": "/services",
+      "slug": "services",
+      "title": "Services",
+      "nav": "Services",
+      "seoTitle": "Headlight Services | OEM Replacement, Restoration & Upgrades | NYC Headlights",
+      "seoDesc": "OEM headlight replacement, lens restoration, moisture removal, LED and laser conversions, projector retrofits and wholesale supply across New York City."
+    },
+    {
+      "path": "/oem-headlights",
+      "slug": "oem-headlights",
+      "title": "OEM Headlights",
+      "nav": "OEM Headlights",
+      "seoTitle": "OEM Headlights in Stock | BMW, Mercedes-Benz, Lexus, Audi | NYC Headlights",
+      "seoDesc": "Authenticated OEM headlight assemblies in stock and ready to ship or install: BMW, Mercedes-Benz, Lexus, Audi, Toyota and Mazda. 10,000+ parts in stock."
+    },
+    {
+      "path": "/faq",
+      "slug": "faq",
+      "title": "FAQ",
+      "nav": "FAQ",
+      "seoTitle": "Headlight Repair & Replacement FAQ | NYC Headlights",
+      "seoDesc": "Answers on OEM vs aftermarket headlights, foggy lens restoration, moisture inside headlights, LED upgrades, turnaround and cost."
+    },
+    {
+      "path": "/service-areas",
+      "slug": "service-areas",
+      "title": "Service Areas",
+      "nav": "Service Areas",
+      "seoTitle": "Headlight Service Areas | Manhattan, Brooklyn, Queens, Bronx, Staten Island",
+      "seoDesc": "NYC Headlights serves all five boroughs: Manhattan, Brooklyn, Queens, the Bronx and Staten Island. Walk-ins welcome, same-day options available."
+    },
+    {
+      "path": "/contact",
+      "slug": "contact",
+      "title": "Contact",
+      "nav": "Contact",
+      "legacy": ["contact-ideal-auto-body"],
+      "seoTitle": "Get a Free Headlight Quote | Contact NYC Headlights",
+      "seoDesc": "Tell us your year, make, model and the issue for a free headlight quote, usually the same day. Call (929) 409-9330."
+    },
+    {
+      "path": "/privacy-policy",
+      "slug": "privacy-policy",
+      "title": "Privacy Policy",
+      "nav": null,
+      "wpContent": true,
+      "legacy": ["privacy-policy-2"],
+      "seoTitle": "Privacy Policy | NYC Headlights",
+      "seoDesc": "How NYC Headlights collects, uses and protects information submitted through this website."
+    },
+    {
+      "path": "/terms",
+      "slug": "terms",
+      "title": "Terms",
+      "nav": null,
+      "wpContent": true,
+      "legacy": ["terms-and-conditions"],
+      "seoTitle": "Terms and Conditions | NYC Headlights",
+      "seoDesc": "Terms and conditions for using the NYC Headlights website."
+    },
+    {
+      "path": "/accessibility",
+      "slug": "accessibility",
+      "title": "Accessibility",
+      "nav": null,
+      "wpContent": true,
+      "legacy": ["accessibility-statement"],
+      "seoTitle": "Accessibility Statement | NYC Headlights",
+      "seoDesc": "NYC Headlights' commitment to digital accessibility and how to report a barrier on this website."
+    }
+  ],
+  "redirectToHome": [
+    "ideal-repair-process",
+    "i-car-gold-class-auto-repair",
+    "certified-collision-repair-ideal-auto",
+    "handling-hit-and-run-guide",
+    "maintaining-older-vehicles-tips",
+    "choosing-right-auto-insurance-guide",
+    "essential-steps-after-car-accident"
+  ]
+}

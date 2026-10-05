@@ -30,6 +30,9 @@ jobs:
       - run: pnpm build
         env:
           VITE_BASE: /NYC-Headlights/
+      # BrowserRouter deep links (/NYC-Headlights/faq/) have no file on Pages;
+      # serving the app as 404.html lets the router take them.
+      - run: cp dist/index.html dist/404.html
       - uses: actions/configure-pages@v5
         with:
           enablement: true

@@ -1,48 +1,93 @@
 # NYC Headlights
 
-## What this repo is (and is not)
+## What this repo is
 
-This repo is a **React 18 + Vite single-page rebrand** of the NYC Headlights homepage.
-It is **not** what currently serves https://nycheadlights.com.
+A **React 18 + Vite SPA** (React Router, multi-page) that is compiled into the
+**`nyc-headlights` WordPress theme** by `build-wordpress-theme.cjs`, following
+`docs/SPA-TO-WORDPRESS-THEME-PLAYBOOK.md` (ported from SiteGround to Hostinger).
+WordPress stays the CMS: X.O. Admin settings, Leads, inline editing, Yoast SEO.
 
-The live site is a **WordPress + Elementor** install. The two are separate things:
+**This theme is live** at https://nycheadlights.com (activated 2026-10-05).
+Elementor, Elementor Pro and their addons were deleted the same day; their
+folders are archived in `~/backups-20261005-172900/removed-plugins.tgz` on the
+server. Pages built in Elementor keep their old HTML in `post_content`, which is
+what the legal pages render.
 
-| | Live site | This repo |
-|---|---|---|
-| Stack | WordPress 7.0.6 + Elementor | React 18 + Vite (static) |
-| URL | https://nycheadlights.com | https://nycheadlights.com/staging/ |
-| Pages | 8 pages + 6 posts | homepage only |
-| Status | in production | not launched |
-
-The WordPress site has indexed pages (`/oem-headlights/`, `/faq/`,
-`/ideal-repair-process/`, `/contact-ideal-auto-body/`, plus legal pages) that the
-React site does not reproduce. **Replacing the live site with this repo would 404
-all of them.** That cutover is a deliberate decision, not a deploy step.
+| | |
+|---|---|
+| Routes | `src/routes.json` — the single list, read by the React router AND the generator (`xo_required_pages()`, legacy 301s, Yoast seed). Add a route there, never in only one place. |
+| Pages | `/`, `/services`, `/oem-headlights`, `/faq`, `/service-areas`, `/contact`, `/privacy-policy`, `/terms`, `/accessibility` |
+| Legal pages | body comes from the WordPress page itself (edited in WP Admin), not from React |
+| Static preview | https://nycheadlights.com/staging/ (`make deploy`, noindex) |
 
 ## Commands
 
 ```bash
-make install        # pnpm install
-make dev            # Vite dev server
-make build          # production build, root base path "/"
-make build-staging  # build with base "/staging/"
-make deploy         # build-staging + rsync to the staging dir on Hostinger
-make verify         # curl the staging URL
-make backup         # dump the live WordPress DB to the server
-make shell          # ssh into Hostinger
+make install / dev          # pnpm install / Vite dev server (no WordPress: forms fall back to mailto)
+make test-connection        # SSH + WP-CLI go/no-go gate (playbook Part 0)
+make build-and-push         # build the theme and rsync it to wp-content/themes/nyc-headlights (does NOT activate)
+make push-functions         # upload only functions.php
+make purge-cache            # flush WP object cache + confirm the CDN is not caching HTML
+make push-preview           # install the preview mu-plugin; prints ?xo_preview=<token> URL
+make remove-preview         # delete it (do this after launch)
+make pull-content           # merge live inline edits into src/data/liveData.json
+make check-content-drift    # exit 1 if live has edits the local defaults lack
+make backup                 # dump the live WordPress DB to the server
+make deploy / verify        # static build to /staging/
+make shell                  # ssh into Hostinger
 ```
 
-`make deploy` only ever writes to the **staging subdirectory**. It never touches
-the WordPress web root.
+**Generated files are never hand-edited.** Everything in `wordpress-theme/` and
+`wordpress-mu/` (gitignored) is rewritten on every build. All PHP lives in
+`build-wordpress-theme.cjs`.
 
-### Base path
+### Base paths
 
-`vite.config.js` reads `VITE_BASE` and defaults to `/`. Anything served from a
-subdirectory must set it, or every asset 404s:
+`vite.config.js` reads `VITE_BASE` (assets) and the router reads
+`VITE_ROUTER_BASE` (falls back to `VITE_BASE`). They differ only in the theme
+build: assets from `/wp-content/themes/nyc-headlights/`, routes from `/`.
+(The playbook's `base: "./"` breaks here: relative asset URLs resolve against
+nested routes like `/faq/`.)
 
-- production (future, web root): `/`
+- WordPress theme: set by the generator
 - staging: `/staging/`
 - GitHub Pages preview: `/NYC-Headlights/` (set in `.github/workflows/deploy.yml`)
+
+## Content layer
+
+Every visible string and image goes through `getText(key, default)`
+(`src/content/`). Key conventions, enforced by the save endpoint:
+
+- `global_*` → X.O. Admin option (`xo_global_*`): phone, email, hours, name
+- `page_*` → scoped to one route; everything else → site-wide (header, footer, shared sections)
+- `*_html` → limited inline HTML · `*_url` / `*_img` → sanitized as URLs · `*_alt` → plain text
+- `{{PHONE}}`, `{{EMAIL}}`, `{{BUSINESS_NAME}}`, `{{CITY_STATE}}` resolve from X.O. Admin
+
+## Content sync rule (live WordPress is the source of truth for content)
+
+Logged-in users edit text/images/links directly on the live site; those edits are
+stored in the WordPress DB and SHADOW the local defaults in src/data/liveData.json.
+The local file is therefore possibly stale at any moment.
+
+- BEFORE editing src/data/liveData.json, any getText()/`<T>` default string, or
+  any content key in components: run `make check-content-drift`.
+- If it reports drift: STOP. Run `make pull-content`, review the diff, commit the
+  sync (`chore(content): sync live edits`), and only then apply the requested
+  local change on top.
+- If SSH is unavailable, say so explicitly and warn that local content may be
+  stale — do not proceed with content edits silently.
+- After deploying local content changes (`make build-and-push`), remember that DB
+  overrides still win over the new defaults; clearing a stale override means
+  deleting it (`xo_route_overrides` / `xo_global_*`), not just redeploying.
+
+## Caching on Hostinger
+
+There is no SiteGround cache here (`wp sg purge` does not apply). HTML is sent
+`no-cache` by the theme and Hostinger's CDN passes it through
+(`x-hcdn-cache-status: DYNAMIC`); hashed bundles are cached forever. Saves call
+`xo_purge_caches()`, which flushes the object cache and **reports** failure to
+the edit toolbar and X.O. Admin rather than failing silently. (The SiteGround
+plugins and their `advanced-cache.php` dropin were removed on 2026-10-05.)
 
 ## Docs are symlinks, not copies
 
@@ -110,20 +155,29 @@ dig +short TXT google._domainkey.nycheadlights.com | wc -c   # expect 416
 
 ## Known issues on the live WordPress site
 
-- **Elementor version mismatch.** Elementor is 4.3.3, Elementor Pro is 3.28.4.
-  Pro cannot update because **no license key is stored**. Needs the client's
-  license entered in WP Admin under Elementor → License. Pages render fine today,
-  but Pro widgets can fail subtly across a gap that large.
-- **LayerSlider 7.10.1** is active, unlicensed, unpatched, and **unused** (no
-  slider table, no shortcodes, no Elementor references). Candidate for deletion.
-- **WordPress core** 7.0.6 has a major update to 7.1.2 pending. Do it in its own
+- **WordPress core** has major updates pending at times. Do them in their own
   window, not alongside plugin work.
-- **SEO leftovers from the template.** The `<title>` still reads "iDeal Collision
-  Centers" and slugs like `/contact-ideal-auto-body/` persist. Content fix, not
-  a hosting one.
+- **The Accessibility page body still names "iDeal Auto Inc."** Legal wording, so
+  it waits for the client.
+- **Unused plugins still active:** Contact Form 7 (the theme's form replaced it;
+  it still sends from an old `jeffl198.sg-host.com` address), YellowPencil (a
+  visual CSS editor with nothing to edit now), WPFront Scroll Top, Duplicate Page.
+- **Outgoing mail shows "via srv2184.main-hosting.eu" in Gmail.** The theme sets
+  the visible From to `NYC Headlights <no-reply@nycheadlights.com>`, but mail is
+  sent by Hostinger while SPF/DKIM only authorize Google, so the domains don't
+  align. **Accepted as-is (decided 2026-10-05):** it only appears on internal
+  lead/admin emails, and the only fixes are Google Workspace SMTP or DNS changes.
+  Don't force the envelope sender to nycheadlights.com: SPF would then softfail.
+- **`wp db query` silently returns empty on this install.** Use `wp eval` with
+  `$wpdb`, or `wp option` / `wp post meta`.
+- **Yoast titles are cached in its indexables table.** Writing `_yoast_wpseo_*`
+  meta directly does nothing visible until the indexable is rebuilt;
+  `xo_sync_yoast()` does that.
 
-Always `make backup` before touching plugins or core. Existing rollback point:
-`~/backups-preupdate-20261005-152035` (DB dump + the 3 plugin folders).
+Always `make backup` before touching plugins or core. Rollback points on the
+server: `~/backups-20261005-165857` (before theme activation, plus the SiteGround
+plugins) and `~/backups-20261005-172900` (before Elementor removal, plus those
+plugins).
 
 ## Do not touch
 

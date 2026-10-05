@@ -21,3 +21,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated WordPress theme (build-wordpress-theme.cjs) — never hand-edit
+dist-wp
+wordpress-theme
+wordpress-mu
+nyc-headlights.zip
+# make pull / pull-content scratch
+.live-theme
+.content-sync

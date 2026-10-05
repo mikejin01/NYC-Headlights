@@ -496,3 +496,49 @@ footer{padding:60px 0 44px;border-top:4px solid var(--red)}
   .trust{grid-template-columns:1fr}
   .trust div{border-left:none}
 }
+
+/* ---- multi-page additions ---- */
+.subnav-links a.active{color:var(--red)}
+.page-hero{padding:84px 0 72px;border-bottom:1px solid var(--line)}
+.page-hero .k{color:var(--red);margin-bottom:18px}
+.page-hero h1{font-size:clamp(36px,5vw,68px);font-weight:900;letter-spacing:-.03em;line-height:.98;
+  text-transform:uppercase;max-width:20ch}
+.page-hero p{margin-top:22px;max-width:60ch;color:#c9c6bc;font-size:16px;line-height:1.6}
+
+.contact-grid{display:grid;grid-template-columns:1fr 380px;gap:64px;align-items:start}
+.contact-info h2{font-size:clamp(26px,3vw,40px);font-weight:900;letter-spacing:-.02em;text-transform:uppercase}
+.contact-info>p{margin-top:14px;color:var(--mute);font-size:15px;line-height:1.6;max-width:48ch}
+.contact-info dl{display:grid;grid-template-columns:90px 1fr;gap:14px 20px;margin-top:32px;font-size:16px}
+.contact-info dt{color:var(--red);padding-top:4px}
+.contact-info dd{font-weight:700}
+.contact-info dd a:hover{color:var(--red)}
+.contact-sec .quote-card{--bg:#0c0c0b;--bg2:#141413;--panel:#1a1a18;--ink:#f3f1ea;--mute:#9b988f;--line:#2a2a27;--red:#e8b64e;
+  background:#0c0c0b;color:var(--ink)}
+
+.qc-hp{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;opacity:0}
+.qc-sent{color:var(--ink);font-size:14.5px;line-height:1.6;padding:6px 0 2px}
+.qc-error{color:#ff8a8a;font-size:13px;line-height:1.5;margin-top:10px}
+
+.wp-content{max-width:78ch;color:var(--ink);font-size:16px;line-height:1.7}
+.wp-content h1,.wp-content h2,.wp-content h3,.wp-content h4,.wp-content h5,.wp-content h6{
+  font-weight:800;letter-spacing:-.01em;line-height:1.25;margin:1.6em 0 .5em;font-size:1.25em}
+.wp-content p,.wp-content ul,.wp-content ol{margin:0 0 1em}
+.wp-content ul,.wp-content ol{padding-left:1.4em}
+.wp-content a{color:var(--red);text-decoration:underline}
+.wp-content-note{color:var(--mute)}
+
+.foot-tagline{margin-top:16px;color:var(--mute)}
+.foot-legal{display:flex;gap:18px;flex-wrap:wrap}
+.foot-legal a:hover{color:var(--red)}
+.not-found{display:flex;gap:14px;flex-wrap:wrap}
+.btn.ghost-dark{background:transparent;border-color:var(--ink)}
+
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr;gap:40px}
+  .page-hero{padding:56px 0 48px}
+  .foot-bottom{flex-direction:column;gap:12px}
+}
+
+/* WordPress expects every theme to define this (Media Library, admin bar). */
+.screen-reader-text{border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;
+  overflow:hidden;padding:0;position:absolute !important;width:1px;word-wrap:normal !important}

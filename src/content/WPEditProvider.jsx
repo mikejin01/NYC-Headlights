@@ -7,12 +7,12 @@ import liveData from '../data/liveData.json'
 //   1. draft[key]                    unsaved edits in this session
 //   2. routeOverrides[route][key]    page_* keys, saved per route
 //   3. routeOverrides['*'][key]      every other key, saved site-wide
-//   4. pageData[key]                 global_* keys (X.O. Admin options)
+//   4. pageData[key]                 global_* keys (site setup page options)
 //   5. liveData.json[key]            local mirror of live edits (make pull-content)
 //   6. the default passed in code
 //
 // Key conventions (the server's save handler sanitizes by suffix/prefix):
-//   global_*  -> X.O. Admin option          page_*  -> scoped to the current route
+//   global_*  -> site setup option           page_*  -> scoped to the current route
 //   *_html    -> limited inline HTML        *_url / *_img -> sanitized as a URL
 
 const Ctx = createContext(null)

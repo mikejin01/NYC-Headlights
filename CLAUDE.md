@@ -5,7 +5,8 @@
 A **React 18 + Vite SPA** (React Router, multi-page) that is compiled into the
 **`nyc-headlights` WordPress theme** by `build-wordpress-theme.cjs`, following
 `docs/SPA-TO-WORDPRESS-THEME-PLAYBOOK.md` (ported from SiteGround to Hostinger).
-WordPress stays the CMS: X.O. Admin settings, Leads, inline editing, Yoast SEO.
+WordPress stays the CMS: the **NYC Headlights** site setup page (WP Admin
+menu, `admin.php?page=xo-admin`), Leads, inline editing, Yoast SEO.
 
 **This theme is live** at https://nycheadlights.com (activated 2026-10-05).
 Elementor, Elementor Pro and their addons were deleted the same day; their
@@ -58,10 +59,10 @@ nested routes like `/faq/`.)
 Every visible string and image goes through `getText(key, default)`
 (`src/content/`). Key conventions, enforced by the save endpoint:
 
-- `global_*` → X.O. Admin option (`xo_global_*`): phone, email, hours, name
+- `global_*` → site setup page option (`xo_global_*`): phone, email, hours, name
 - `page_*` → scoped to one route; everything else → site-wide (header, footer, shared sections)
 - `*_html` → limited inline HTML · `*_url` / `*_img` → sanitized as URLs · `*_alt` → plain text
-- `{{PHONE}}`, `{{EMAIL}}`, `{{BUSINESS_NAME}}`, `{{CITY_STATE}}` resolve from X.O. Admin
+- `{{PHONE}}`, `{{EMAIL}}`, `{{BUSINESS_NAME}}`, `{{CITY_STATE}}` resolve from the site setup page
 
 ## Content sync rule (live WordPress is the source of truth for content)
 
@@ -86,7 +87,7 @@ There is no SiteGround cache here (`wp sg purge` does not apply). HTML is sent
 `no-cache` by the theme and Hostinger's CDN passes it through
 (`x-hcdn-cache-status: DYNAMIC`); hashed bundles are cached forever. Saves call
 `xo_purge_caches()`, which flushes the object cache and **reports** failure to
-the edit toolbar and X.O. Admin rather than failing silently. (The SiteGround
+the edit toolbar and the site setup page rather than failing silently. (The SiteGround
 plugins and their `advanced-cache.php` dropin were removed on 2026-10-05.)
 
 ## Docs are symlinks, not copies
@@ -159,7 +160,7 @@ dig +short TXT google._domainkey.nycheadlights.com | wc -c   # expect 416
   window, not alongside plugin work.
 - **Elementor-built pages pointed at the deleted `elementor_canvas` template**,
   which makes WordPress refuse to save them ("Invalid page template").
-  `xo_ensure_required_pages()` (X.O. Admin → Pages) resets any template the
+  `xo_ensure_required_pages()` (NYC Headlights page → Pages) resets any template the
   theme doesn't provide; run it again if old content ever comes back.
 - **Outgoing mail shows "via srv2184.main-hosting.eu" in Gmail.** The theme sets
   the visible From to `NYC Headlights <no-reply@nycheadlights.com>`, but mail is
@@ -178,7 +179,9 @@ server, each with a DB dump and an archive of the plugins removed in that step:
 `~/backups-20261005-165857` (theme activation; SiteGround plugins),
 `~/backups-20261005-172900` (Elementor + addons, LayerSlider, WP Reset, Under
 Construction), `~/backups-20261005-173304` (Contact Form 7, YellowPencil, WPFront
-Scroll Top, Duplicate Page). Remaining plugins: Akismet, Site Kit, Ally
+Scroll Top, Duplicate Page), `~/backups-20261005-173803` (DB only: before the
+iDeal page/posts and Elementor/CF7 template records were trashed — the trash
+auto-empties after 30 days). Remaining plugins: Akismet, Site Kit, Ally
 (pojo-accessibility), Wordfence, WP Activity Log, Yoast SEO.
 
 ## Do not touch

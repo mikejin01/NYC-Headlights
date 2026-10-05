@@ -21,6 +21,8 @@ const path = require('path')
 
 const THEME_SLUG = 'nyc-headlights'
 const THEME_NAME = 'NYC Headlights'
+// Name of the site setup page in the WP Admin menu (playbook default: X.O. Admin).
+const ADMIN_MENU_NAME = 'NYC Headlights'
 const OUT = 'dist-wp'
 const THEME_DIR = path.join(__dirname, 'wordpress-theme')
 const ROUTES = JSON.parse(fs.readFileSync(path.join(__dirname, 'src/routes.json'), 'utf8'))
@@ -115,7 +117,7 @@ const functionsPhp = php`<?php
  * ${BANNER}
  *
  * Sections: routes & pages · assets & wpRest · content API · SEO & redirects ·
- * caching · X.O. Admin · Leads.
+ * caching · site setup page · Leads.
  */
 if (!defined('ABSPATH')) exit;
 
@@ -174,7 +176,7 @@ function xo_page_for_route($route) {
 /**
  * Make sure every route has a published WP page. Existing pages are renamed in
  * place from their legacy slug (keeping ID, Yoast fields and history) instead of
- * duplicated. Idempotent: runs on activation and from X.O. Admin → Repair Pages.
+ * duplicated. Idempotent: runs on activation and from the site setup page → Pages.
  */
 function xo_ensure_required_pages() {
     $log = array();
@@ -323,7 +325,7 @@ add_filter('body_class', function ($classes) {
     return array_values(array_filter($classes, function ($c) { return !preg_match('/^(elementor|ehf-|exad-|page-template)/', $c); }));
 }, 99);
 
-/** X.O. Admin fields exposed to the SPA as global_* keys (empty ones fall back to code defaults). */
+/** Site setup page fields exposed to the SPA as global_* keys (empty ones fall back to code defaults). */
 function xo_global_fields() {
     return array('business_name', 'contact_phone', 'contact_email', 'contact_hours', 'city_state', 'contact_address');
 }
@@ -456,7 +458,7 @@ function xo_sanitize_content_value($key, $value) {
 
 /**
  * Inline-edit save (playbook §4.1). Scope by key prefix:
- *   global_*  -> xo_global_* option (X.O. Admin fields)
+ *   global_*  -> xo_global_* option (site setup page fields)
  *   page_*    -> xo_route_overrides[route] (+ post meta on that page)
  *   other     -> xo_route_overrides['*'] (site-wide: header, footer, shared sections)
  * An empty value deletes the override, restoring the code default.
@@ -581,7 +583,7 @@ add_action('send_headers', function () {
 });
 
 /* ======================================================================
- * X.O. Admin (companion doc Part A, prefix xo).
+ * Site setup page, menu name ADMIN_MENU_NAME (companion doc Part A, prefix xo).
  * ==================================================================== */
 
 function xo_set_defaults() {
@@ -597,7 +599,7 @@ function xo_set_defaults() {
 }
 
 add_action('admin_menu', function () {
-    add_menu_page('X.O. Admin', 'X.O. Admin', 'manage_options', 'xo-admin', 'xo_admin_page', 'dashicons-admin-generic', 3);
+    add_menu_page('${ADMIN_MENU_NAME}', '${ADMIN_MENU_NAME}', 'manage_options', 'xo-admin', 'xo_admin_page', 'dashicons-admin-generic', 3);
     $new = xo_count_new_leads();
     $label = 'Leads' . ($new ? ' <span class="awaiting-mod count-' . $new . '"><span class="pending-count">' . $new . '</span></span>' : '');
     add_menu_page('Leads', $label, 'manage_options', 'edit.php?post_type=lead_submission', '', 'dashicons-email-alt', 4);
@@ -674,7 +676,7 @@ function xo_admin_page() {
       @media(max-width:1100px){.xo-grid{grid-template-columns:1fr}}
     </style>
     <div class="wrap">
-      <h1>X.O. Admin</h1>
+      <h1>${ADMIN_MENU_NAME}</h1>
       <?php if (!xo_lead_email()) echo '<div class="notice notice-error"><p><strong>No lead email set.</strong> Quote requests are saved under Leads but nobody is emailed until you fill in an email below.</p></div>'; ?>
       <div class="xo-grid">
         <div class="xo-col">
@@ -743,7 +745,7 @@ add_action('admin_notices', function () {
     if (!current_user_can('manage_options') || xo_lead_email()) return;
     $screen = get_current_screen();
     if ($screen && $screen->id === 'toplevel_page_xo-admin') return;
-    echo '<div class="notice notice-warning"><p>NYC Headlights: no lead email is set, so quote requests are not being emailed. <a href="' . esc_url(xo_admin_url()) . '">Set it in X.O. Admin</a>.</p></div>';
+    echo '<div class="notice notice-warning"><p>No lead email is set, so quote requests are not being emailed. <a href="' . esc_url(xo_admin_url()) . '">Set it on the ${ADMIN_MENU_NAME} page</a>.</p></div>';
 });
 
 /* ======================================================================
@@ -832,7 +834,7 @@ function xo_handle_lead(WP_REST_Request $req) {
     }
     update_post_meta($post_id, 'lead_reviewed', '0');
 
-    // Forward to the X.O. Admin address. Record the outcome on the lead so a
+    // Forward to the lead notification address. Record the outcome on the lead so a
     // delivery failure is visible in the Leads list instead of vanishing.
     $to = xo_lead_email();
     if ($to && is_email($to)) {

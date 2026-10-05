@@ -5,7 +5,7 @@ import { useBusiness, useWPEdit } from '../content/WPEditProvider'
 const EMPTY = { name: '', email: '', phone: '', message: '', company: '' }
 
 // Free-quote form. On WordPress it posts to the Leads endpoint (playbook Part 3),
-// which saves a lead_submission and emails the X.O. Admin address. Off WordPress
+// which saves a lead_submission and emails the lead notification address. Off WordPress
 // (vite dev, static staging) there is no backend, so it falls back to mailto.
 export function QuoteForm() {
   const { onWordPress, wpRest, isEditing } = useWPEdit()

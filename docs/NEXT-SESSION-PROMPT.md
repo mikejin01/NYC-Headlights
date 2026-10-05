@@ -58,22 +58,54 @@ locally, rsync the result up.
 |---|---|
 | Pure client-rendered React SPA | met |
 | `base: "./"` in `vite.config.js` | currently `process.env.VITE_BASE \|\| '/'` — reconcile |
-| History-based routing | **missing — no router at all** |
+| History-based routing | **missing — no router at all; multi-page is required, so this must be built** |
 | `getText(key, default)` content layer | **missing — 46 strings + 5 assets hardcoded** |
 
 `src/App.jsx` is one scrolling page with anchor sections (`services`, `faq`,
 `inventory`, `vehicles`, `areas`, `categories`, `trade`, `quote`). Those are
 anchors, not routes.
 
-## Decisions needed from the user up front
+## Decisions already made (do not re-ask)
 
-1. **One page or multi-page?** If the site stays single-page, `xo_required_pages()`
-   is just Home and this gets much simpler. If multi-page, the anchor sections
-   become routes and the other pages must be built.
-2. **`docs/WORDPRESS-SITE-SETUP-AND-LEADS.md` is missing.** The playbook defers
-   all Part 2 (X.O. Admin) and Part 3 (Leads) PHP to it. Either the user supplies
-   it, or write those sections from the playbook's descriptions.
-3. **Theme slug** (playbook §0.0).
+1. **Multi-page.** Every page gets a real, crawlable URL and its own Yoast
+   fields — not anchor links on one scrolling page. This means React Router with
+   `BrowserRouter`, a route list kept in sync with `xo_required_pages()`, and one
+   WordPress page per route (playbook §1.1, §1.4b).
+2. **Elementor is being retired entirely.** Elementor Pro's missing license is
+   therefore moot — do not chase it. Once the generated theme is proven, Elementor,
+   Elementor Pro, and the addon plugins all come out.
+3. **Companion doc resolved.** `docs/WORDPRESS-SITE-SETUP-AND-LEADS.md` is now in
+   this repo (908 lines, copied from the iDeal Auto Collision reference; all five
+   copies across the agency repos were byte-identical). It holds Part A (admin
+   page) and Part B (Leads) PHP, written against an `acme` prefix — substitute
+   `xo`.
+
+## Still to confirm with the user
+
+1. **Theme slug** (playbook §0.0).
+2. **The route list and slugs.** Proposal below — confirm before building, since
+   slug choices affect what stays indexed.
+
+| Route | Source | Note |
+|---|---|---|
+| `/` | Home | existing front page |
+| `/services` | `services` section | new |
+| `/oem-headlights` | `inventory` + `vehicles` sections | **keep slug, already indexed** |
+| `/faq` | `faq` section | **keep slug, already indexed** |
+| `/service-areas` | `areas` section | new |
+| `/contact` | `quote` section | replaces `/contact-ideal-auto-body/`, 301 it |
+| `/privacy-policy` | existing | currently `/privacy-policy-2/`, 301 it |
+| `/terms` | existing | currently `/terms-and-conditions/` |
+| `/accessibility` | existing | currently `/accessibility-statement/` |
+
+Also needs 301s: `/ideal-repair-process/` and the six dropped blog posts → `/`.
+
+## SEO follow-up the user explicitly wants
+
+The site is **not currently in Google Search Console**. Add the property and
+submit the sitemap once the multi-page theme is live, otherwise none of the new
+URLs can be monitored. Yoast is already installed and serving
+`/sitemap_index.xml`.
 
 ## Hard constraints
 
@@ -92,9 +124,8 @@ anchors, not routes.
 - **`wp db query` silently returns empty on this install.** It reported 0 rows for
   a table holding 6,222. Use `wp eval` with `$wpdb` instead. This produced one
   wrong conclusion before it was caught — do not trust `wp db query` here.
-- **Elementor Pro 3.28.4 has no license key stored** and cannot update, while free
-  Elementor is at 4.3.3. If the theme conversion retires Elementor, this becomes
-  moot. If not, the client's license is needed.
+- **Elementor Pro 3.28.4 has no license key stored** and cannot update. The user
+  has decided to retire Elementor entirely, so this is moot — do not chase it.
 - **The 6 blog posts are not this client's content.** All are iDeal Auto Collision
   auto-body articles with zero mentions of headlights. Two page slugs carry the
   same problem (`/ideal-repair-process/`, `/contact-ideal-auto-body/`). The site
@@ -106,11 +137,14 @@ anchors, not routes.
 
 ## Suggested order
 
-1. Confirm the three decisions above.
+1. Confirm the theme slug and the route list/slugs above.
 2. Port playbook Part 0 to Hostinger; `make test-connection` equivalent must pass.
 3. Retrofit `getText()` across `src/App.jsx` (46 strings, 5 assets).
-4. Add routing if multi-page.
+4. Add React Router (BrowserRouter) and build out the routes; keep the route list
+   in sync with xo_required_pages().
 5. Build `build-wordpress-theme.cjs`; generate the theme.
 6. Deploy to the server **without activating**; verify.
 7. Activate, verify as logged-out visitor, test inline edit + a real lead.
-8. Retire Elementor and the unused plugins once the theme is proven.
+8. Add 301s for the old slugs and the six dropped posts.
+9. Retire Elementor, Elementor Pro, and the addon plugins once the theme is proven.
+10. Add the site to Google Search Console and submit the sitemap.

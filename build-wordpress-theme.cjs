@@ -224,9 +224,30 @@ function xo_ensure_required_pages() {
             if (!$cur || get_post_status($cur) !== 'publish') update_option('wp_page_for_privacy_policy', $id);
         }
     }
+    $log = array_merge($log, xo_reset_orphaned_page_templates());
     flush_rewrite_rules();
     delete_transient('xo_route_titles');
     update_option('xo_last_page_repair', array('at' => current_time('mysql'), 'log' => $log), false);
+    return $log;
+}
+
+/**
+ * Posts built in Elementor point _wp_page_template at elementor_canvas, which
+ * no longer exists now the plugin is gone. WordPress then refuses to save them
+ * ("Invalid page template"), in WP Admin and wp_update_post() alike. Reset any
+ * template this theme doesn't provide back to default. The front end is
+ * unaffected: template_include always serves the SPA shell.
+ */
+function xo_reset_orphaned_page_templates() {
+    $valid = array_keys(wp_get_theme()->get_page_templates());
+    $log = array();
+    foreach (get_posts(array('post_type' => 'any', 'post_status' => 'any', 'numberposts' => -1,
+                             'meta_key' => '_wp_page_template', 'fields' => 'ids')) as $id) {
+        $t = get_post_meta($id, '_wp_page_template', true);
+        if ($t === '' || $t === 'default' || in_array($t, $valid, true)) continue;
+        update_post_meta($id, '_wp_page_template', 'default');
+        $log[] = "reset missing template '$t' on #$id";
+    }
     return $log;
 }
 

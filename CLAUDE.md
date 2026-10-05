@@ -157,11 +157,10 @@ dig +short TXT google._domainkey.nycheadlights.com | wc -c   # expect 416
 
 - **WordPress core** has major updates pending at times. Do them in their own
   window, not alongside plugin work.
-- **The Accessibility page body still names "iDeal Auto Inc."** Legal wording, so
-  it waits for the client.
-- **Unused plugins still active:** Contact Form 7 (the theme's form replaced it;
-  it still sends from an old `jeffl198.sg-host.com` address), YellowPencil (a
-  visual CSS editor with nothing to edit now), WPFront Scroll Top, Duplicate Page.
+- **Elementor-built pages pointed at the deleted `elementor_canvas` template**,
+  which makes WordPress refuse to save them ("Invalid page template").
+  `xo_ensure_required_pages()` (X.O. Admin → Pages) resets any template the
+  theme doesn't provide; run it again if old content ever comes back.
 - **Outgoing mail shows "via srv2184.main-hosting.eu" in Gmail.** The theme sets
   the visible From to `NYC Headlights <no-reply@nycheadlights.com>`, but mail is
   sent by Hostinger while SPF/DKIM only authorize Google, so the domains don't
@@ -175,9 +174,12 @@ dig +short TXT google._domainkey.nycheadlights.com | wc -c   # expect 416
   `xo_sync_yoast()` does that.
 
 Always `make backup` before touching plugins or core. Rollback points on the
-server: `~/backups-20261005-165857` (before theme activation, plus the SiteGround
-plugins) and `~/backups-20261005-172900` (before Elementor removal, plus those
-plugins).
+server, each with a DB dump and an archive of the plugins removed in that step:
+`~/backups-20261005-165857` (theme activation; SiteGround plugins),
+`~/backups-20261005-172900` (Elementor + addons, LayerSlider, WP Reset, Under
+Construction), `~/backups-20261005-173304` (Contact Form 7, YellowPencil, WPFront
+Scroll Top, Duplicate Page). Remaining plugins: Akismet, Site Kit, Ally
+(pojo-accessibility), Wordfence, WP Activity Log, Yoast SEO.
 
 ## Do not touch
 

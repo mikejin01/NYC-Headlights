@@ -52,9 +52,16 @@ subdirectory must set it, or every asset 404s:
 shares one copy and improvements propagate. Git stores the link target, not the
 content.
 
-Consequences: editing either file here edits the shared source for every repo
-that links it. The links resolve only on this machine — a fresh clone elsewhere
-gets dangling links. Never replace one with a copy to "fix" it.
+**Treat both as read-only from this repo.** Content flows one way, iDeal Auto
+Collision → here. They are one file, not a copy, so editing either through this
+repo's path silently rewrites the shared original for every project that links
+it. If a playbook needs a fix, make it in
+`~/Documents/GitHub/iDeal Auto/iDeal Auto Collision/docs/` deliberately, where
+that repo's git history records it.
+
+Two other things to know: the links are absolute and resolve only on this
+machine, so a fresh clone elsewhere gets dangling links; and never "fix" a
+dangling link by replacing it with a copy, which forks the shared doc.
 
 ## Infrastructure
 

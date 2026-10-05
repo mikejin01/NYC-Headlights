@@ -12,8 +12,18 @@ pnpm dev
 ## Build
 
 ```bash
-pnpm build
+pnpm build      # root base path
 pnpm preview
+```
+
+## Deploy
+
+The live site at nycheadlights.com is WordPress. This React site deploys to a
+staging subdirectory only. See CLAUDE.md before any production cutover.
+
+```bash
+make deploy     # build + rsync to https://nycheadlights.com/staging/
+make verify     # check it responds
 ```
 
 ## Contact

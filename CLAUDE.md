@@ -44,6 +44,18 @@ subdirectory must set it, or every asset 404s:
 - staging: `/staging/`
 - GitHub Pages preview: `/NYC-Headlights/` (set in `.github/workflows/deploy.yml`)
 
+## Docs are symlinks, not copies
+
+`docs/SPA-TO-WORDPRESS-THEME-PLAYBOOK.md` and
+`docs/WORDPRESS-SITE-SETUP-AND-LEADS.md` are **absolute symlinks** into
+`~/Documents/GitHub/iDeal Auto/iDeal Auto Collision/docs/`, so every project
+shares one copy and improvements propagate. Git stores the link target, not the
+content.
+
+Consequences: editing either file here edits the shared source for every repo
+that links it. The links resolve only on this machine — a fresh clone elsewhere
+gets dangling links. Never replace one with a copy to "fix" it.
+
 ## Infrastructure
 
 Migrated off SiteGround in Oct 2026. Current state:

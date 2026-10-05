@@ -74,11 +74,10 @@ anchors, not routes.
 2. **Elementor is being retired entirely.** Elementor Pro's missing license is
    therefore moot — do not chase it. Once the generated theme is proven, Elementor,
    Elementor Pro, and the addon plugins all come out.
-3. **Companion doc resolved.** `docs/WORDPRESS-SITE-SETUP-AND-LEADS.md` is now in
-   this repo (908 lines, copied from the iDeal Auto Collision reference; all five
-   copies across the agency repos were byte-identical). It holds Part A (admin
-   page) and Part B (Leads) PHP, written against an `acme` prefix — substitute
-   `xo`.
+3. **Companion doc resolved.** `docs/WORDPRESS-SITE-SETUP-AND-LEADS.md` now
+   resolves, holding Part A (admin page) and Part B (Leads) PHP, written against
+   an `acme` prefix — substitute `xo`. Like the playbook beside it, it is a
+   **symlink** into the iDeal Auto Collision repo, not a copy — see CLAUDE.md.
 
 ## Still to confirm with the user
 
